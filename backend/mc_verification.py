@@ -1,19 +1,20 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 import requests
 import os
 from dotenv import load_dotenv
+from auth import verify_api_key
 
-load_dotenv(".env.local")
+load_dotenv(".env")
 router = APIRouter()
 
-@router.get("/verify-mc/{mc_number}")
+@router.get("/verify-mc/{mc_number}", dependencies=[Depends(verify_api_key)])
 def verify_mc(mc_number: str):
     
-    api_key = os.getenv("FMCSA_API_KEY")
-    if not api_key:
+    fmcsa_api_key = os.getenv("FMCSA_API_KEY")
+    if not fmcsa_api_key:
         return {"error": "FMCSA_API_KEY not found in environment"}
     
-    url = f"https://mobile.fmcsa.dot.gov/qc/services/carriers/docket-number/{mc_number}?webKey={api_key}"
+    url = f"https://mobile.fmcsa.dot.gov/qc/services/carriers/docket-number/{mc_number}?webKey={fmcsa_api_key}"
     response = requests.get(url)
     data = response.json()
     

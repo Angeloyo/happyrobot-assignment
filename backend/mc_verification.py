@@ -7,7 +7,7 @@ from auth import verify_api_key
 load_dotenv(".env")
 router = APIRouter()
 
-@router.get("/verify-mc/{mc_number}", dependencies=[Depends(verify_api_key)])
+@router.get("/verify-mc", dependencies=[Depends(verify_api_key)])
 def verify_mc(mc_number: str):
     
     fmcsa_api_key = os.getenv("FMCSA_API_KEY")

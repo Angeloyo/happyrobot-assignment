@@ -22,13 +22,14 @@ def verify_mc(mc_number: str):
         return {"eligible": False, "reason": "MC number not found"}
     
     carrier = data["content"][0]["carrier"]
-    eligible = (carrier.get("allowedToOperate") == "Y" and 
-                carrier.get("statusCode") == "A")
+    eligible = (carrier.get("allowedToOperate") == "Y" 
+                # and carrier.get("statusCode") == "A" # ????
+                )
     
     return {
         "eligible": eligible,
         "company_name": carrier.get("legalName"),
         "mc_number": mc_number,
-        "dot_number": carrier.get("dotNumber"),
+        "dot_number": str(carrier.get("dotNumber")),
         "reason": "Carrier approved" if eligible else "Does not meet requirements"
     }

@@ -127,7 +127,7 @@ export function LoadsTable() {
         <TableBody>
           {loads.map((load) => (
             <TableRow key={load.load_id} className="border-b border-border hover:bg-muted/50">
-              <TableCell className="font-mono text-sm">{load.load_id.substring(0, 8)}...</TableCell>
+              <TableCell className="font-mono text-sm">{load.load_id}</TableCell>
               <TableCell>{load.origin}</TableCell>
               <TableCell>{load.destination}</TableCell>
               <TableCell className="text-sm">{formatDate(load.pickup_datetime)}</TableCell>

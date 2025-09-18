@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Trash2 } from "lucide-react"
 import { toast } from "sonner"
 import { Load } from "@/lib/types"
+import { formatDate, formatCurrency } from "@/lib/utils"
 
 export function LoadsTable() {
   const [loads, setLoads] = useState<Load[]>([])
@@ -79,17 +80,6 @@ export function LoadsTable() {
     }
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString() + " " + 
-           new Date(dateString).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-  }
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount)
-  }
 
   if (loading) {
     return (

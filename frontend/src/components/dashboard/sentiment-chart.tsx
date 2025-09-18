@@ -13,6 +13,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { CallLogFull } from "@/lib/types";
 
 interface SentimentCounts {
   positive: number;
@@ -21,7 +22,7 @@ interface SentimentCounts {
 }
 
 interface SentimentChartProps {
-  data: any[] | null;
+  data: CallLogFull[] | null;
   loading: boolean;
 }
 
@@ -41,7 +42,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function SentimentChart({ data, loading }: SentimentChartProps) {
-  const sentimentCounts = data ? data.reduce((acc: SentimentCounts, log: { sentiment?: string }) => {
+  const sentimentCounts = data ? data.reduce((acc: SentimentCounts, log: CallLogFull) => {
     const sentiment = log.sentiment?.toLowerCase();
     if (sentiment === 'positive') acc.positive++;
     else if (sentiment === 'negative') acc.negative++;

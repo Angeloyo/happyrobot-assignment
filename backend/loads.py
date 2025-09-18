@@ -187,14 +187,18 @@ def delete_load(load_id: str):
         conn.close()
 
 @router.get("/loads/search", dependencies=[Depends(verify_api_key)])
-def search_loads(origin: str = None, destination: str = None):
-    """Search loads by origin and/or destination"""
+def search_loads(origin: str = None, destination: str = None, load_id: str = None):
+    """Search loads by load_id, origin and/or destination"""
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         
         where_conditions = []
         params = []
+        
+        if load_id:
+            where_conditions.append("load_id ILIKE %s")
+            params.append(f"%{load_id}%")
         
         if origin:
             where_conditions.append("origin ILIKE %s")

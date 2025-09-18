@@ -197,15 +197,15 @@ def search_loads(origin: str = None, destination: str = None, load_id: str = Non
         params = []
         
         if load_id:
-            where_conditions.append("load_id ILIKE %s")
+            where_conditions.append("l.load_id ILIKE %s")
             params.append(f"%{load_id}%")
         
         if origin:
-            where_conditions.append("origin ILIKE %s")
+            where_conditions.append("l.origin ILIKE %s")
             params.append(f"%{origin}%")
         
         if destination:
-            where_conditions.append("destination ILIKE %s")
+            where_conditions.append("l.destination ILIKE %s")
             params.append(f"%{destination}%")
         
         where_clause = ""
@@ -214,23 +214,25 @@ def search_loads(origin: str = None, destination: str = None, load_id: str = Non
         
         cursor.execute(f"""
             SELECT 
-                load_id, 
-                origin, 
-                destination, 
-                pickup_datetime, 
-                delivery_datetime,
-                equipment_type, 
-                loadboard_rate, 
-                notes, 
-                weight, 
-                commodity_type,
-                num_of_pieces, 
-                miles, 
-                dimensions, 
-                created_at
-            FROM loads
+                l.load_id, 
+                l.origin, 
+                l.destination, 
+                l.pickup_datetime, 
+                l.delivery_datetime,
+                l.equipment_type, 
+                l.loadboard_rate, 
+                l.notes, 
+                l.weight, 
+                l.commodity_type,
+                l.num_of_pieces, 
+                l.miles, 
+                l.dimensions, 
+                l.created_at,
+                CASE WHEN b.booking_id IS NOT NULL THEN true ELSE false END as is_booked
+            FROM loads l
+            LEFT JOIN bookings b ON l.load_id = b.load_id
             {where_clause}
-            ORDER BY created_at DESC
+            ORDER BY l.created_at DESC
         """, params)
         
         loads = []
@@ -249,7 +251,8 @@ def search_loads(origin: str = None, destination: str = None, load_id: str = Non
                 num_of_pieces=row[10],
                 miles=float(row[11]) if row[11] is not None else None,
                 dimensions=row[12],
-                created_at=row[13]
+                created_at=row[13],
+                is_booked=row[14]
             ))
         
         return loads

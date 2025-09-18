@@ -30,3 +30,10 @@ CREATE TABLE IF NOT EXISTS call_logs (
   final_rate         numeric(10,2),
   created_at         timestamptz NOT NULL DEFAULT now()
 );
+
+CREATE TABLE bookings (
+  booking_id     uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  load_id        varchar(10) REFERENCES loads(load_id) UNIQUE,
+  call_id        uuid REFERENCES call_logs(call_id),
+  booking_date   timestamptz NOT NULL DEFAULT now()
+);

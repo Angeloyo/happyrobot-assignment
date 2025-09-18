@@ -33,6 +33,7 @@ class LoadResponse(BaseModel):
     dimensions: Optional[str] = None
     
     created_at: datetime
+    is_booked: Optional[bool] = False
 
 class CallLogCreate(BaseModel):
     load_id: Optional[str] = None
@@ -53,3 +54,4 @@ class CallLogResponse(BaseModel):
     result: Optional[str] = None
     final_rate: Optional[float] = None
     created_at: datetime
+    booking_created: Optional[bool] = False

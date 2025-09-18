@@ -19,9 +19,6 @@ export default function LoadsPage() {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Loads</h1>
-          <p className="text-muted-foreground mt-2">
-            Manage freight loads and carrier assignments
-          </p>
         </div>
         <Button 
           onClick={() => setIsDialogOpen(true)}

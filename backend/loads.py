@@ -2,20 +2,56 @@ from fastapi import APIRouter, Depends, HTTPException
 from auth import verify_api_key
 from models import LoadCreate, LoadResponse
 from database import get_db_connection
-import uuid
+from datetime import datetime
 
 router = APIRouter()
+
+def generate_load_id():
+    """Generate a new load ID in format L + YYMMDD + 3-digit sequence"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Get current date in YYMMDD format
+    today = datetime.now().strftime("%y%m%d")
+    prefix = f"L{today}"
+    
+    # Find the highest sequence number for today
+    cursor.execute("""
+        SELECT load_id FROM loads 
+        WHERE load_id LIKE %s 
+        ORDER BY load_id DESC 
+        LIMIT 1
+    """, (f"{prefix}%",))
+    
+    result = cursor.fetchone()
+    
+    if result:
+        # Extract sequence number and increment
+        last_id = result[0]
+        sequence = int(last_id[-3:]) + 1
+    else:
+        # First load of the day
+        sequence = 1
+    
+    cursor.close()
+    conn.close()
+    
+    return f"{prefix}{sequence:03d}"
 
 @router.post("/loads", response_model=LoadResponse, dependencies=[Depends(verify_api_key)])
 def create_load(load: LoadCreate):
     """Create a new load"""
     try:
+        # Generate new load ID
+        load_id = generate_load_id()
+        
         conn = get_db_connection()
         cursor = conn.cursor()
 
         # Insert into database
         cursor.execute("""
             INSERT INTO loads (
+                load_id,
                 origin, 
                 destination, 
                 pickup_datetime, 
@@ -28,9 +64,10 @@ def create_load(load: LoadCreate):
                 num_of_pieces, 
                 miles, 
                 dimensions
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            RETURNING load_id, created_at
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            RETURNING created_at
         """, (
+            load_id,
             load.origin, 
             load.destination, 
             load.pickup_datetime,
@@ -45,12 +82,12 @@ def create_load(load: LoadCreate):
             load.dimensions
         ))
         
-        load_id, created_at = cursor.fetchone()
+        created_at = cursor.fetchone()[0]
         conn.commit()
         
         # Return the created load
         return LoadResponse(
-            load_id=str(load_id),
+            load_id=load_id,
             origin=load.origin,
             destination=load.destination,
             pickup_datetime=load.pickup_datetime,

@@ -1,7 +1,6 @@
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TABLE IF NOT EXISTS loads (
-  load_id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  load_id            varchar(10) PRIMARY KEY,
   origin             text        NOT NULL,
   destination        text        NOT NULL,
   pickup_datetime    timestamptz NOT NULL,

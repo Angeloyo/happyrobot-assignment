@@ -14,6 +14,7 @@ def create_call_log(call_log: CallLogCreate):
 
         cursor.execute("""
             INSERT INTO call_logs (
+                load_id,
                 mc_number,
                 carrier_name,
                 notes,
@@ -21,9 +22,10 @@ def create_call_log(call_log: CallLogCreate):
                 result,
                 initial_rate,
                 final_rate
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING call_id, created_at
         """, (
+            call_log.load_id,
             call_log.mc_number,
             call_log.carrier_name,
             call_log.notes,
@@ -38,6 +40,7 @@ def create_call_log(call_log: CallLogCreate):
         
         return CallLogResponse(
             call_id=str(call_id),
+            load_id=call_log.load_id,
             mc_number=call_log.mc_number,
             carrier_name=call_log.carrier_name,
             notes=call_log.notes,

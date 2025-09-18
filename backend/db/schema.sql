@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS loads (
 
 CREATE TABLE IF NOT EXISTS call_logs (
   call_id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  load_id            varchar(10) REFERENCES loads(load_id),
   mc_number          integer,
   carrier_name       text,
   notes              text,

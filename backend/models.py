@@ -35,6 +35,7 @@ class LoadResponse(BaseModel):
     created_at: datetime
 
 class CallLogCreate(BaseModel):
+    load_id: Optional[str] = None
     mc_number: Optional[int] = None
     carrier_name: Optional[str] = None
     notes: Optional[str] = None
@@ -45,6 +46,7 @@ class CallLogCreate(BaseModel):
 
 class CallLogResponse(BaseModel):
     call_id: str
+    load_id: Optional[str] = None
     mc_number: Optional[int] = None
     carrier_name: Optional[str] = None
     notes: Optional[str] = None

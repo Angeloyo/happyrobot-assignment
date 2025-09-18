@@ -18,3 +18,16 @@ CREATE TABLE IF NOT EXISTS loads (
   CONSTRAINT chk_delivery_after_pickup
     CHECK (delivery_datetime >= pickup_datetime)
 );
+
+
+CREATE TABLE IF NOT EXISTS call_logs (
+  call_id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  mc_number          integer,
+  carrier_name       text,
+  notes              text,
+  sentiment          text,
+  result             text,
+  initial_rate       numeric(10,2),
+  final_rate         numeric(10,2),
+  created_at         timestamptz NOT NULL DEFAULT now()
+);

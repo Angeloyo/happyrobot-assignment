@@ -33,3 +33,23 @@ class LoadResponse(BaseModel):
     dimensions: Optional[str] = None
     
     created_at: datetime
+
+class CallLogCreate(BaseModel):
+    mc_number: Optional[int] = None
+    carrier_name: Optional[str] = None
+    notes: Optional[str] = None
+    sentiment: Optional[str] = None
+    result: Optional[str] = None
+    initial_rate: Optional[float] = None
+    final_rate: Optional[float] = None
+
+class CallLogResponse(BaseModel):
+    call_id: str
+    mc_number: Optional[int] = None
+    carrier_name: Optional[str] = None
+    notes: Optional[str] = None
+    sentiment: Optional[str] = None
+    result: Optional[str] = None
+    initial_rate: Optional[float] = None
+    final_rate: Optional[float] = None
+    created_at: datetime

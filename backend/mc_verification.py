@@ -16,6 +16,11 @@ def verify_mc(mc_number: str):
     
     url = f"https://mobile.fmcsa.dot.gov/qc/services/carriers/docket-number/{mc_number}?webKey={fmcsa_api_key}"
     response = requests.get(url)
+    
+    # Check if response is successful and contains JSON
+    if response.status_code != 200:
+        return {"error": f"FMCSA API error: {response.status_code}"}
+    
     data = response.json()
     
     if not data.get("content"):

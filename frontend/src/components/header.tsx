@@ -16,7 +16,7 @@ export function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="font-bold text-xl text-foreground">
-            FreightMS
+            Acme Logistics
           </Link>
           
           <nav className="flex items-center space-x-6">

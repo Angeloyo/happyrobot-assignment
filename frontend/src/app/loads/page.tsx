@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { LoadsTable } from "@/components/loads-table"
-import { AddLoadDialog } from "@/components/add-load-dialog"
+import { LoadsTable } from "@/components/loads/loads-table"
+import { AddLoadDialog } from "@/components/loads/add-load-dialog"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 

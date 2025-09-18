@@ -148,3 +148,73 @@ def delete_load(load_id: str):
     finally:
         cursor.close()
         conn.close()
+
+@router.get("/loads/search", dependencies=[Depends(verify_api_key)])
+def search_loads(origin: str = None, destination: str = None):
+    """Search loads by origin and/or destination"""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        where_conditions = []
+        params = []
+        
+        if origin:
+            where_conditions.append("origin ILIKE %s")
+            params.append(f"%{origin}%")
+        
+        if destination:
+            where_conditions.append("destination ILIKE %s")
+            params.append(f"%{destination}%")
+        
+        where_clause = ""
+        if where_conditions:
+            where_clause = "WHERE " + " AND ".join(where_conditions)
+        
+        cursor.execute(f"""
+            SELECT 
+                load_id, 
+                origin, 
+                destination, 
+                pickup_datetime, 
+                delivery_datetime,
+                equipment_type, 
+                loadboard_rate, 
+                notes, 
+                weight, 
+                commodity_type,
+                num_of_pieces, 
+                miles, 
+                dimensions, 
+                created_at
+            FROM loads
+            {where_clause}
+            ORDER BY created_at DESC
+        """, params)
+        
+        loads = []
+        for row in cursor.fetchall():
+            loads.append(LoadResponse(
+                load_id=str(row[0]),
+                origin=row[1],
+                destination=row[2],
+                pickup_datetime=row[3],
+                delivery_datetime=row[4],
+                equipment_type=row[5],
+                loadboard_rate=float(row[6]),
+                notes=row[7],
+                weight=float(row[8]) if row[8] is not None else None,
+                commodity_type=row[9],
+                num_of_pieces=row[10],
+                miles=float(row[11]) if row[11] is not None else None,
+                dimensions=row[12],
+                created_at=row[13]
+            ))
+        
+        return loads
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    finally:
+        cursor.close()
+        conn.close()

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { SentimentChart } from "@/components/dashboard/sentiment-chart";
+import { SuccessRateChart } from "@/components/dashboard/success-rate-chart";
 import { RecentCallsTable } from "@/components/dashboard/recent-calls-table";
 
 export default function Dashboard() {
@@ -50,6 +51,7 @@ export default function Dashboard() {
       
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <SentimentChart data={callLogsData} loading={loading} />
+        <SuccessRateChart data={callLogsData} loading={loading} />
       </div>
 
       <RecentCallsTable data={callLogsData} loading={loading} />
@@ -58,7 +60,8 @@ export default function Dashboard() {
       ideas: 
       - que loads son las mas solicitadas, por numero de llamadas
       - que loads son las mas rechazadas por precio alto
-      -  
+      - bar chart o similar de bookings cerrados por dia
+      - popular routes
       */}
     </div>
   );

@@ -20,9 +20,8 @@ def create_call_log(call_log: CallLogCreate):
                 notes,
                 sentiment,
                 result,
-                initial_rate,
                 final_rate
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s)
             RETURNING call_id, created_at
         """, (
             call_log.load_id,
@@ -31,7 +30,6 @@ def create_call_log(call_log: CallLogCreate):
             call_log.notes,
             call_log.sentiment,
             call_log.result,
-            call_log.initial_rate,
             call_log.final_rate
         ))
         
@@ -46,13 +44,58 @@ def create_call_log(call_log: CallLogCreate):
             notes=call_log.notes,
             sentiment=call_log.sentiment,
             result=call_log.result,
-            initial_rate=call_log.initial_rate,
             final_rate=call_log.final_rate,
             created_at=created_at
         )
         
     except Exception as e:
         conn.rollback()
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+@router.get("/call-logs", dependencies=[Depends(verify_api_key)])
+def get_call_logs():
+    """Get all call logs"""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            SELECT 
+                call_id,
+                load_id,
+                mc_number,
+                carrier_name,
+                notes,
+                sentiment,
+                result,
+                final_rate,
+                created_at
+            FROM call_logs
+            ORDER BY created_at DESC
+        """)
+        
+        call_logs = []
+        for row in cursor.fetchall():
+            call_logs.append(CallLogResponse(
+                call_id=str(row[0]),
+                load_id=row[1],
+                mc_number=row[2],
+                carrier_name=row[3],
+                notes=row[4],
+                sentiment=row[5],
+                result=row[6],
+                final_rate=float(row[7]) if row[7] is not None else None,
+                created_at=row[8]
+            ))
+        
+        return call_logs
+        
+    except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     finally:
         if cursor:

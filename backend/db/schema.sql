@@ -27,7 +27,6 @@ CREATE TABLE IF NOT EXISTS call_logs (
   notes              text,
   sentiment          text,
   result             text,
-  initial_rate       numeric(10,2),
   final_rate         numeric(10,2),
   created_at         timestamptz NOT NULL DEFAULT now()
 );

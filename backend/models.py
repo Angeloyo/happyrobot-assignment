@@ -41,7 +41,6 @@ class CallLogCreate(BaseModel):
     notes: Optional[str] = None
     sentiment: Optional[str] = None
     result: Optional[str] = None
-    initial_rate: Optional[float] = None
     final_rate: Optional[float] = None
 
 class CallLogResponse(BaseModel):
@@ -52,6 +51,5 @@ class CallLogResponse(BaseModel):
     notes: Optional[str] = None
     sentiment: Optional[str] = None
     result: Optional[str] = None
-    initial_rate: Optional[float] = None
     final_rate: Optional[float] = None
     created_at: datetime

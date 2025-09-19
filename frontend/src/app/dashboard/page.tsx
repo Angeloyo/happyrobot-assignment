@@ -7,10 +7,11 @@ import { LoadBookingChart } from "@/components/dashboard/load-booking-chart";
 import { NegotiationChart } from "@/components/dashboard/negotiation-chart";
 import { RecentCallsTable } from "@/components/dashboard/recent-calls-table";
 import { toast } from "sonner";
+import { CallLogFull, Load } from "@/lib/types";
 
 export default function Dashboard() {
-  const [callLogsData, setCallLogsData] = useState(null);
-  const [loadsData, setLoadsData] = useState(null);
+  const [callLogsData, setCallLogsData] = useState<CallLogFull[] | null>(null);
+  const [loadsData, setLoadsData] = useState<Load[] | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -68,6 +69,14 @@ export default function Dashboard() {
           <p className="text-sm text-muted-foreground">Powered by HappyRobot</p>
         </div>
       </div>
+      
+      {callLogsData && (
+        <div className="mb-8">
+          <p className="text-2xl font-bold text-foreground">
+            Total calls: {callLogsData.length}
+          </p>
+        </div>
+      )}
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <SentimentChart data={callLogsData} loading={loading} />

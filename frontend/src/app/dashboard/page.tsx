@@ -6,6 +6,7 @@ import { SuccessRateChart } from "@/components/dashboard/success-rate-chart";
 import { LoadBookingChart } from "@/components/dashboard/load-booking-chart";
 import { NegotiationChart } from "@/components/dashboard/negotiation-chart";
 import { RecentCallsTable } from "@/components/dashboard/recent-calls-table";
+import { toast } from "sonner";
 
 export default function Dashboard() {
   const [callLogsData, setCallLogsData] = useState(null);
@@ -19,6 +20,7 @@ export default function Dashboard() {
   const fetchData = async () => {
     const apiKey = localStorage.getItem("freight_api_key");
     if (!apiKey) {
+      toast.error("Please set your API key in Settings");
       setLoading(false);
       return;
     }

@@ -34,6 +34,7 @@ This proof of concept demonstrates an automated inbound carrier sales system for
     - Rate Negotiation
   - Load management interface
 
+<img width="1847" height="1513" alt="freight-arch" src="https://github.com/user-attachments/assets/dfe2c647-d468-4634-a4bb-5ac63acbf085" />
 
 ---
 

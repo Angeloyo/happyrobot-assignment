@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { SentimentChart } from "@/components/dashboard/sentiment-chart";
 import { SuccessRateChart } from "@/components/dashboard/success-rate-chart";
 import { LoadBookingChart } from "@/components/dashboard/load-booking-chart";
+import { NegotiationChart } from "@/components/dashboard/negotiation-chart";
 import { RecentCallsTable } from "@/components/dashboard/recent-calls-table";
 
 export default function Dashboard() {
@@ -66,10 +67,11 @@ export default function Dashboard() {
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <SentimentChart data={callLogsData} loading={loading} />
         <SuccessRateChart data={callLogsData} loading={loading} />
         <LoadBookingChart data={loadsData} loading={loading} />
+        <NegotiationChart data={callLogsData} loading={loading} />
       </div>
 
       <RecentCallsTable data={callLogsData} loading={loading} />

@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import { SentimentChart } from "@/components/dashboard/sentiment-chart";
 import { SuccessRateChart } from "@/components/dashboard/success-rate-chart";
+import { LoadBookingChart } from "@/components/dashboard/load-booking-chart";
 import { RecentCallsTable } from "@/components/dashboard/recent-calls-table";
 
 export default function Dashboard() {
   const [callLogsData, setCallLogsData] = useState(null);
+  const [loadsData, setLoadsData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,19 +23,33 @@ export default function Dashboard() {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/call-logs-full", {
-        method: "GET",
-        headers: {
-          "X-API-Key": apiKey,
-        },
-      });
+      const [callLogsResponse, loadsResponse] = await Promise.all([
+        fetch("http://localhost:8000/call-logs-full", {
+          method: "GET",
+          headers: {
+            "X-API-Key": apiKey,
+          },
+        }),
+        fetch("http://localhost:8000/loads", {
+          method: "GET",
+          headers: {
+            "X-API-Key": apiKey,
+          },
+        })
+      ]);
 
-      if (!response.ok) {
+      if (!callLogsResponse.ok) {
         throw new Error("Failed to fetch call logs");
       }
+      if (!loadsResponse.ok) {
+        throw new Error("Failed to fetch loads");
+      }
 
-      const data = await response.json();
-      setCallLogsData(data);
+      const callLogsData = await callLogsResponse.json();
+      const loadsData = await loadsResponse.json();
+
+      setCallLogsData(callLogsData);
+      setLoadsData(loadsData);
     } catch (error) {
       console.error('Failed to fetch data:', error);
     } finally {
@@ -49,9 +65,10 @@ export default function Dashboard() {
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <SentimentChart data={callLogsData} loading={loading} />
         <SuccessRateChart data={callLogsData} loading={loading} />
+        <LoadBookingChart data={loadsData} loading={loading} />
       </div>
 
       <RecentCallsTable data={callLogsData} loading={loading} />

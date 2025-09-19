@@ -32,7 +32,7 @@ export function LoadsTable() {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/loads", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/loads`, {
         method: "GET",
         headers: {
           "X-API-Key": apiKey,
@@ -61,7 +61,7 @@ export function LoadsTable() {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/loads/${loadId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/loads/${loadId}`, {
         method: "DELETE",
         headers: {
           "X-API-Key": apiKey,

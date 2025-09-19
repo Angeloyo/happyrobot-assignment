@@ -27,13 +27,13 @@ export default function Dashboard() {
 
     try {
       const [callLogsResponse, loadsResponse] = await Promise.all([
-        fetch("http://localhost:8000/call-logs-full", {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/call-logs-full`, {
           method: "GET",
           headers: {
             "X-API-Key": apiKey,
           },
         }),
-        fetch("http://localhost:8000/loads", {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/loads`, {
           method: "GET",
           headers: {
             "X-API-Key": apiKey,

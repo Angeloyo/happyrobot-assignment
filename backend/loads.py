@@ -119,22 +119,24 @@ def get_loads():
         
         cursor.execute("""
             SELECT 
-                load_id, 
-                origin, 
-                destination, 
-                pickup_datetime, 
-                delivery_datetime,
-                equipment_type, 
-                loadboard_rate, 
-                notes, 
-                weight, 
-                commodity_type,
-                num_of_pieces, 
-                miles, 
-                dimensions, 
-                created_at
-            FROM loads
-            ORDER BY created_at DESC
+                l.load_id, 
+                l.origin, 
+                l.destination, 
+                l.pickup_datetime, 
+                l.delivery_datetime,
+                l.equipment_type, 
+                l.loadboard_rate, 
+                l.notes, 
+                l.weight, 
+                l.commodity_type,
+                l.num_of_pieces, 
+                l.miles, 
+                l.dimensions, 
+                l.created_at,
+                CASE WHEN b.booking_id IS NOT NULL THEN true ELSE false END as is_booked
+            FROM loads l
+            LEFT JOIN bookings b ON l.load_id = b.load_id
+            ORDER BY l.created_at DESC
         """)
         
         loads = []
@@ -153,7 +155,8 @@ def get_loads():
                 num_of_pieces=row[10],
                 miles=float(row[11]) if row[11] is not None else None,
                 dimensions=row[12],
-                created_at=row[13]
+                created_at=row[13],
+                is_booked=row[14]
             ))
         
         return loads

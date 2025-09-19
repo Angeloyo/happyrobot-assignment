@@ -111,6 +111,7 @@ export function LoadsTable() {
             <TableHead className="font-semibold text-foreground">Rate</TableHead>
             <TableHead className="font-semibold text-foreground">Weight</TableHead>
             <TableHead className="font-semibold text-foreground">Miles</TableHead>
+            <TableHead className="font-semibold text-foreground">Status</TableHead>
             <TableHead className="font-semibold text-foreground">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -126,6 +127,17 @@ export function LoadsTable() {
               <TableCell className="font-semibold">{formatCurrency(load.loadboard_rate)}</TableCell>
               <TableCell>{load.weight ? `${load.weight.toLocaleString()} lbs` : "-"}</TableCell>
               <TableCell>{load.miles ? load.miles.toLocaleString() : "-"}</TableCell>
+              <TableCell>
+                {load.is_booked ? (
+                  <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 font-medium">
+                    Booked
+                  </span>
+                ) : (
+                  <span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-600 font-medium">
+                    Available
+                  </span>
+                )}
+              </TableCell>
               <TableCell>
                 <Button
                   variant="outline"

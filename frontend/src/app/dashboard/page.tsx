@@ -62,6 +62,7 @@ export default function Dashboard() {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-sm text-muted-foreground">Powered by HappyRobot</p>
         </div>
       </div>
       

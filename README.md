@@ -1,16 +1,16 @@
 # Inbound Carrier Sales Automation POC
 
-## 🚚 Overview
+## Overview
 
 This proof of concept demonstrates an automated inbound carrier sales system for freight brokerages. The system handles carrier calls, verifies MC numbers, matches loads, tracks negotiations, and provides comprehensive analytics.
 
 **Live Demo:**
-- 🌐 **Frontend**: [https://freight.angeloyo.com](https://freight.angeloyo.com)
-- 🔗 **Backend API**: [https://api.freight.angeloyo.com](https://api.freight.angeloyo.com)
+- **Frontend**: [https://freight.angeloyo.com](https://freight.angeloyo.com)
+- **Backend API**: [https://api.freight.angeloyo.com](https://api.freight.angeloyo.com)
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ### Backend (Python FastAPI)
 - **Framework**: FastAPI with PostgreSQL
@@ -37,7 +37,7 @@ This proof of concept demonstrates an automated inbound carrier sales system for
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Local Deployment with Docker
 
@@ -88,7 +88,7 @@ docker-compose down -v && docker-compose up --build
 
 ---
 
-## 🔧 API Endpoints
+## API Endpoints
 
 ### Core Endpoints
 - `GET /health` - Health check
@@ -108,7 +108,7 @@ All endpoints require `X-API-Key` header with valid API key.
 
 ---
 
-## 🚀 Production Deployment
+## Production Deployment
 
 ### Backend Deployment (Railway)
 

@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: freight_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: freight_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/db/railway_dump.sql:/docker-entrypoint-initdb.d/railway_dump.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d freight_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - FMCSA_API_KEY=${FMCSA_API_KEY}
+      - PROJECT_API_KEY=${PROJECT_API_KEY}
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=freight_db
+      - DB_USER=postgres
+      - DB_PASSWORD=freight_pass
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
